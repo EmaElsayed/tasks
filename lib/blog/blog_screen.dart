@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/blog/add_blog_screen.dart';
+import 'package:untitled/blog/blogs_model.dart';
+import 'package:untitled/blog/edit_blog_screen.dart';
+
+void main() {
+  runApp( MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
 
 
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home:BlogScreen ());
+  }
+}
 class BlogScreen extends StatefulWidget {
   const BlogScreen({Key? key}) : super(key: key);
 
@@ -16,19 +38,33 @@ class _BlogScreenState extends State<BlogScreen> {
   final String blogImageUrl =
       "https://imgd.aeplcdn.com/1056x594/n/cw/ec/44686/activa-6g-right-front-three-quarter.jpeg";
 
+List<BlogsModel> blogs = [
+ // BlogsModel("image", "title", "body")de
+
+];
 
 
   @override
   Widget build(BuildContext context) {
-    var blogs;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Blog"),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AddBlogScreen(),)).then((value) {
+          BlogsModel blog = value;
+          blogs.add(blog);
+          setState(() {
+
+          });
+
+        },);
+      },
+      child: Icon(Icons.add),
       ),
-     // floatingActionButton: FloatingActionButton(
-       // onPressed: () => navigateToAddBlogScreen(),
-      //  child: const Icon(Icons.add),
-     // ),
+      appBar: AppBar(
+        title: Center(child: const Text("Blog")),
+      ),
+
       body: Column(
         children: [
           SizedBox(
@@ -40,6 +76,7 @@ class _BlogScreenState extends State<BlogScreen> {
             ),
           ),
           Expanded(
+
             child: ListView.builder(
               itemCount: blogs.length,
               itemBuilder: (context, index) => blogItem(index),
@@ -50,15 +87,35 @@ class _BlogScreenState extends State<BlogScreen> {
     );
   }
 
-  userItem() {}
+  userItem() {
+    return Container(
+      margin: EdgeInsets.all(7),
 
- 
+      child: Column(
+        children: [
+          Stack(
+            alignment: AlignmentDirectional.bottomEnd,
+            children: [
+              CircleAvatar(
+
+                radius: 25,
+              backgroundImage: NetworkImage(imageUrl ) ,
+              ),
+              CircleAvatar(
+
+                radius: 10,
+                backgroundColor: Colors.green,
+              ),
+
+            ],
+          ),
+          Text("amir mohamed")
+        ],
+      ),
+    );
   }
 
   Widget blogItem(int index) {
-    
-
-    var blog;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -78,7 +135,7 @@ class _BlogScreenState extends State<BlogScreen> {
               topRight: Radius.circular(15),
             ),
             child: Image.network(
-              blog.imageUrl,
+              blogs[index].image,
               height: 150,
               width: double.infinity,
               fit: BoxFit.fill,
@@ -90,14 +147,23 @@ class _BlogScreenState extends State<BlogScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    blog.title,
+                  child: Text(blogs[index].title,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return EditBlogScreen ();
+                    },)) .then((value)  {
+                      BlogsModel blog = value ;
+                      blogs[index]=blog;
+                      setState(() {
+
+                      });
+                    });
+                  },
                   icon: const Icon(
                     Icons.edit,
                     color: Colors.purple,
@@ -105,7 +171,11 @@ class _BlogScreenState extends State<BlogScreen> {
                 ),
                 IconButton(
                   onPressed: () {
-                   
+                    blogs.removeAt(index);
+                    setState(() {
+
+                    });
+
                   },
                   icon: const Icon(
                     Icons.delete,
@@ -118,7 +188,7 @@ class _BlogScreenState extends State<BlogScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              blog.body,
+              blogs[index].body,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
@@ -128,7 +198,11 @@ class _BlogScreenState extends State<BlogScreen> {
         ],
       ),
     );
+    
   }
+  }
+
+
 
 
      
