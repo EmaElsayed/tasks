@@ -28,7 +28,9 @@ class BlogScreen extends StatefulWidget {
 
   @override
   State<BlogScreen> createState() => _BlogScreenState();
+
 }
+
 
 class _BlogScreenState extends State<BlogScreen> {
   final String imageUrl =
