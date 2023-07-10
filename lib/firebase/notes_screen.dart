@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/firebase/add_node_screen.dart';
+import 'package:untitled/firebase/edit_note_screen.dart';
 
 
 Future<void> main() async {
@@ -26,8 +28,43 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class NotesScreen extends StatelessWidget {
-  const NotesScreen({super.key});
+class NotesScreen extends StatefulWidget {
+   NotesScreen({super.key});
+
+  @override
+  State<NotesScreen> createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+List notes = [];
+
+final firebaseStore = FirebaseFirestore.instance;
+@override
+  void initState() {
+    // TODO: implement initState
+  getNOteFromFirebase();
+  super.initState();
+  }
+
+
+void getNOteFromFirebase(){
+  print("===================================");
+  firebaseStore.collection("notes").get().then((value) {
+    for(var document in value.docs){
+
+    final note = document.data();
+    print(note);
+    notes.add(note);
+print(notes);
+    };
+    setState(() {
+
+    });
+  });
+
+
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,27 +76,41 @@ class NotesScreen extends StatelessWidget {
       child: Icon(Icons.add),
       ),
 
-      body: Column(children: [
+      body: ListView.builder(itemBuilder: (context, index) {
+        return addNoteScreen(note: notes[index]['note'], id: notes[index]['id']);
 
-        Container(
-          
-          margin: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(10)
-          ),
-          padding: EdgeInsets.all(8),
-          child: Row(
-            children: [
-              Text("note",style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-              Spacer(),
-              IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-              IconButton(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.red,)),
-            ],
-          ),
-        )
+      },
 
-      ],),
+      itemCount: notes.length,
+      )
     );
   }
-}
+
+  Widget addNoteScreen({required String note,required String id})
+  {
+    return  Container(
+
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      padding: EdgeInsets.all(8),
+      child: Row(
+        children: [
+          Text(note,style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+          Spacer(),
+          IconButton(onPressed: (){
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return EditNoteScreen(id: id,);
+
+            })).then((value) {
+              getNOteFromFirebase();
+            });
+          }, icon: Icon(Icons.edit)),
+          IconButton(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.red,)),
+        ],
+      ),
+    );
+  }}

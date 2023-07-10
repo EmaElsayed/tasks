@@ -1,15 +1,14 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AddNewNoteScreen extends StatefulWidget {
-  const AddNewNoteScreen({Key? key}) : super(key: key);
-
+class EditNoteScreen  extends StatefulWidget {
+  EditNoteScreen ({super.key, required this.id});
+final String id;
   @override
-  State<AddNewNoteScreen> createState() => _AddNewNoteScreenState();
+  State<EditNoteScreen> createState() => _EditNoteScreenState();
 }
 
-class _AddNewNoteScreenState extends State<AddNewNoteScreen> {
+class _EditNoteScreenState extends State<EditNoteScreen> {
   final noteController = TextEditingController();
 
   final firestore = FirebaseFirestore.instance;
@@ -36,7 +35,7 @@ class _AddNewNoteScreenState extends State<AddNewNoteScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                onPressed: () => addNote(),
+                onPressed: () => editNote(widget.id),
                 child: const Text("Add"),
               ),
             ),
@@ -46,7 +45,7 @@ class _AddNewNoteScreenState extends State<AddNewNoteScreen> {
     );
   }
 
-  addNote() {
+  editNote(String id) {
     String note = noteController.text;
 
     // Map<String, dynamic> => key : value
@@ -56,12 +55,15 @@ class _AddNewNoteScreenState extends State<AddNewNoteScreen> {
 
     String currentMillis = DateTime.now().millisecondsSinceEpoch.toString();
 
-    Map<String, dynamic> data = {
-      "id": currentMillis,
-      "note": note,
-    };
 
-    firestore.collection("notes").doc(data['id']).set(data);
-    Navigator.pop(context);
+
+    firestore.collection("notes").doc(id).update(
+
+      {
+        "note": note
+      }
+    );
+Navigator.pop(context,note);
+
   }
 }
