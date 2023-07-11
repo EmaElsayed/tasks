@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:untitled/firebase/notes_screen.dart';
 
 
 class NotesRegisterScreen extends StatelessWidget {
@@ -82,6 +83,9 @@ class NotesRegisterScreen extends StatelessWidget {
           (value) {
         Navigator.pop(context);
         showToast("Account created");
+        MaterialPageRoute(
+          builder: (context) => NotesScreen(),
+        );
       },
     ).catchError(
           (error) {

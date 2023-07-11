@@ -5,6 +5,7 @@ import 'package:untitled/firebase/add_node_screen.dart';
 import 'package:untitled/firebase/edit_note_screen.dart';
 import 'package:untitled/firebase/forgot_password.dart';
 import 'package:untitled/firebase/notes_login_screen.dart';
+import 'package:untitled/firebase/notes_register_screen.dart';
 
 
 Future<void> main() async {
