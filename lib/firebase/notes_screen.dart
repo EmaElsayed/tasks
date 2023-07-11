@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/firebase/add_node_screen.dart';
 import 'package:untitled/firebase/edit_note_screen.dart';
+import 'package:untitled/firebase/forgot_password.dart';
+import 'package:untitled/firebase/notes_login_screen.dart';
 
 
 Future<void> main() async {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:NotesScreen ());
+        home: ForgotPasswordScreen ());
   }
 }
 
